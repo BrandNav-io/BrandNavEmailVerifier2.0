@@ -89,8 +89,8 @@ const SESSION_MAX_AGE = parseInt(getEnvVar('SESSION_MAX_AGE', '86400000', false)
 
 // Admin authentication
 
-const ADMIN_EMAIL = getEnvVar('ADMIN_EMAIL', 'chandelshiv45@gmail.com', false);
-const ADMIN_PASSWORD = getEnvVar('ADMIN_PASSWORD', 'real4madrid', false);
+const ADMIN_EMAIL = getEnvVar('ADMIN_EMAIL', 'your-personal-email@domain.com', false);
+const ADMIN_PASSWORD = getEnvVar('ADMIN_PASSWORD', 'your-verifier-password', false);
 
 // CSV upload limits
 

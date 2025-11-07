@@ -366,6 +366,33 @@ export interface HistoryResponse {
 }
 
 
+/**
+ * Port 25 connectivity check response
+ */
+export interface Port25CheckResponse {
+    success: boolean;
+    port25Open: boolean;
+    canVerifyEmails: boolean;
+    testedHost: string | null;
+    provider: string | null;
+    attemptedHosts: string[];
+    responseTime: number | null;
+    totalTime: number;
+    smtpBanner: string | null;
+    error: string | null;
+    errors: Array<{
+        host: string;
+        provider: string;
+        error: string;
+        reason: string;
+        severity: string;
+        blocked: boolean | string;
+    }>;
+    recommendation: string | null;
+    timestamp: string;
+}
+
+
 // CSV Verification API Operations
 
 /**
@@ -656,6 +683,36 @@ export const verificationApi = {
             const statusCode = (error as any)?.status;
             const validationErrors = (error as any)?.validationErrors;
             throw new Error(formatErrorMessage(message, statusCode, validationErrors));
+        }
+    },
+
+
+    /**
+     * Check port 25 connectivity
+     * Verifies if outbound SMTP port 25 is accessible for email verification
+     *
+     * @returns {Promise<Port25CheckResponse>} Promise resolving to port 25 connectivity status
+     * @throws {Error} If connectivity check fails
+     */
+    async checkPort25(): Promise<Port25CheckResponse> {
+        try {
+            const response = await axiosGet<{
+                success: boolean;
+                data: Port25CheckResponse;
+            }>(`${config.api.baseUrl}/api/verifier/port25-check`);
+
+            if (!response.success || !response.data) {
+                const error = new Error(response.error instanceof Error ? response.error.message : response.error || 'Port 25 check failed');
+                (error as any).status = response.status;
+                throw error;
+            }
+
+            return response.data.data;
+
+        } catch (error) {
+            const message = error instanceof Error ? error.message : 'Port 25 connectivity check failed';
+            const statusCode = (error as any)?.status;
+            throw new Error(formatErrorMessage(message, statusCode));
         }
     },
 };

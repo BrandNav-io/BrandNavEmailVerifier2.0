@@ -3,12 +3,15 @@
  * Simple, mobile-friendly layout for authenticated user pages
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { LogOut, Key, History } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Button } from '../ui';
-import { authApi } from '../../lib/api';
+import { authApi, verificationApi } from '../../lib/api';
+import { Port25Badge } from './Port25Badge';
+import type { Port25Status } from './Port25Badge';
+import { Port25WarningBanner } from './Port25WarningBanner';
 
 
 interface DashboardLayoutProps {
@@ -27,6 +30,10 @@ export function DashboardLayout({
         const location = useLocation();
         const navigate = useNavigate();
         const [isLoggingOut, setIsLoggingOut] = useState(false);
+        const [port25Status, setPort25Status] = useState<Port25Status>('unknown');
+        const [isCheckingPort25, setIsCheckingPort25] = useState(false);
+        const [showWarningBanner, setShowWarningBanner] = useState(false);
+        const [warningMessage, setWarningMessage] = useState('');
 
 
         const handleLogout = async () => {
@@ -45,6 +52,47 @@ export function DashboardLayout({
                 setIsLoggingOut(false);
             }
         };
+
+
+        const checkPort25Status = async () => {
+            try {
+                setIsCheckingPort25(true);
+                setPort25Status('checking');
+
+                const result = await verificationApi.checkPort25();
+
+                if (result.port25Open) {
+                    setPort25Status('open');
+                    setShowWarningBanner(false);
+                } else {
+                    setPort25Status('closed');
+                    if (result.recommendation) {
+                        setWarningMessage(result.recommendation);
+                        setShowWarningBanner(true);
+                    }
+                }
+
+            } catch (error) {
+                console.error('Port 25 check failed:', error);
+                setPort25Status('unknown');
+                setShowWarningBanner(false);
+                toast.error('Unable to check port 25 connectivity');
+            } finally {
+                setIsCheckingPort25(false);
+            }
+        };
+
+
+        const handleDismissWarning = () => {
+            setShowWarningBanner(false);
+        };
+
+
+        // Auto-check port 25 on component mount (once)
+        useEffect(() => {
+            checkPort25Status();
+        }, []);
+
 
         const isActiveRoute = (path: string) => {
             return location.pathname === path || location.pathname.startsWith(path + '/');
@@ -74,6 +122,11 @@ export function DashboardLayout({
                             <div className="flex items-center space-x-2">
                                 {/* Navigation links - Always visible, icon-only on mobile */}
                                 <nav className="flex items-center space-x-1">
+                                    <Port25Badge
+                                        status={port25Status}
+                                        onClick={checkPort25Status}
+                                        disabled={isCheckingPort25}
+                                    />
                                     <Link
                                         to="/api-tokens"
                                         className={`p-2.5 md:px-3 md:py-2 rounded-md text-sm font-medium transition-colors cursor-pointer flex items-center md:space-x-2 ${isActiveRoute('/api-tokens')
@@ -116,6 +169,14 @@ export function DashboardLayout({
                         </div>
                     </div>
                 </header>
+
+                {/* Port 25 Warning Banner */}
+                {showWarningBanner && (
+                    <Port25WarningBanner
+                        message={warningMessage}
+                        onDismiss={handleDismissWarning}
+                    />
+                )}
 
                 {/* Main content */}
                 <main className="flex-1">

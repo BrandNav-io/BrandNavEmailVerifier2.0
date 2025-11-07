@@ -26,6 +26,7 @@ const {
 const { getVerificationStatus } = require('../../functions/route_fns/verify/verificationStatus');
 const { getVerificationResults } = require('../../functions/route_fns/verify/verificationResults');
 const { getHistory } = require('../../functions/route_fns/verify/verificationHistory');
+const { checkPort25Connectivity } = require('../../functions/verifier/utils/checkPort25');
 const { MAX_CSV_SIZE_MB } = require('../../data/env');
 
 // Create Express router instance
@@ -200,6 +201,45 @@ router.get('/health', (_req, res) => {
 		console.debug('Verifier health check process completed');
 	}
 });
+
+
+/**
+ * GET /api/verifier/port25-check
+ * Check if outbound port 25 (SMTP) is accessible
+ * Used to verify if email verification can be performed
+ * Requires authentication (session OR API key)
+ *
+ * @param {import('express').Request} req - Express request object
+ * @param {import('express').Response} res - Express response object
+ * @returns {Promise<void>} Sends port 25 connectivity test results
+ */
+router.get('/port25-check', authenticateEither, async (req, res) => {
+	try {
+		const result = await checkPort25Connectivity();
+
+		return res.json({
+			success: true,
+			data: result
+		});
+
+	} catch (error) {
+		const errorMessage = error instanceof Error ? error.message : String(error);
+		console.error('Port 25 check failed:', {
+			error: errorMessage,
+			timestamp: new Date().toISOString()
+		});
+
+		return res.status(500).json({
+			success: false,
+			message: 'Port 25 connectivity check failed',
+			error: errorMessage
+		});
+
+	} finally {
+		console.debug('Port 25 check process completed');
+	}
+});
+
 
 // Comprehensive error handling middleware for verifier routes
 

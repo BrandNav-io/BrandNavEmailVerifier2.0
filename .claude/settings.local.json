@@ -12,7 +12,16 @@
       "Bash(npm install:*)",
       "Bash(node -e:*)",
       "Bash(sqlite3:*)",
-      "Bash(git checkout:*)"
+      "Bash(git checkout:*)",
+      "Bash(git -c user.name=\"BrandNav Team\" -c user.email=\"support@brandnav.io\" commit -m \"$(cat <<''EOF''\nInitial commit: Email verification system with frontend and backend\n\nComplete email verification system featuring:\n- Backend: Node.js/Express API with SMTP verification, anti-greylisting, and rate limiting\n- Frontend: React + TypeScript + Tailwind CSS UI with bulk CSV processing\n- Database: SQL-based verification history and API key management\n- Testing: Comprehensive Jest test suite for all verification flows\n- Docker: Multi-stage builds with docker-compose orchestration\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git log:*)",
+      "Bash(git remote add:*)",
+      "Bash(git push:*)",
+      "Bash(git -c user.name=\"BrandNav Team\" -c user.email=\"support@brandnav.io\" commit -m \"$(cat <<''EOF''\nUpdate repository URL in README.md\n\nChanged clone URL from old repository to BrandNav repository:\nhttps://github.com/BrandNav-io/BrandNavEmailVerifier2.0.git\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git -c user.name=\"BrandNav Team\" -c user.email=\"support@brandnav.io\" commit -m \"$(cat <<''EOF''\nFix data persistence documentation in README.md\n\nCorrected the documentation to accurately reflect that the application uses\nbind mounts (not Docker volumes) to persist data on the host machine in the\n.data directory:\n- .data/db - SQLite database files\n- .data/csv - Uploaded CSV files  \n- .data/logs - Application logs\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git -c user.name=\"BrandNav Team\" -c user.email=\"support@brandnav.io\" commit -m \"$(cat <<''EOF''\nFix API documentation reference in README.md\n\nUpdated documentation link from non-existent api-programmatic-verification-guide.md\nto the correct API_REFERENCE.md file. Also updated the description to accurately\nreflect the content (cURL examples instead of multiple languages).\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(npm test:*)",
+      "Bash(node test-port25-manual.js:*)"
     ],
     "deny": [],
     "ask": []

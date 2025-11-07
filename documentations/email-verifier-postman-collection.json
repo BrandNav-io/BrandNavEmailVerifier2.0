@@ -505,6 +505,93 @@
 					"body": "{\n  \"success\": true,\n  \"data\": {\n    \"history\": [\n      {\n        \"verification_request_id\": \"api-550e8400-e29b-41d4-a716-446655440000\",\n        \"request_type\": \"api\",\n        \"status\": \"completed\",\n        \"total_emails\": 100,\n        \"completed_emails\": 100,\n        \"created_at\": 1729260000000,\n        \"completed_at\": 1729260120000,\n        \"list_name\": null\n      },\n      {\n        \"verification_request_id\": \"api-7c97a5c6-fe3a-4954-ad31-60d5fcbfd5f2\",\n        \"request_type\": \"api\",\n        \"status\": \"completed\",\n        \"total_emails\": 50,\n        \"completed_emails\": 50,\n        \"created_at\": 1729173600000,\n        \"completed_at\": 1729173660000,\n        \"list_name\": null\n      },\n      {\n        \"verification_request_id\": \"api-123e4567-e89b-12d3-a456-426614174000\",\n        \"request_type\": \"api\",\n        \"status\": \"processing\",\n        \"total_emails\": 1000,\n        \"completed_emails\": 450,\n        \"created_at\": 1729259400000,\n        \"completed_at\": null,\n        \"list_name\": null\n      }\n    ],\n    \"pagination\": {\n      \"page\": 1,\n      \"per_page\": 50,\n      \"total\": 3,\n      \"total_pages\": 1,\n      \"has_more\": false\n    }\n  }\n}"
 				}
 			]
+		},
+		{
+			"name": "Check Port 25 Connectivity",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{api_key}}",
+							"type": "string"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url}}/api/verifier/port25-check",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"verifier",
+						"port25-check"
+					]
+				},
+				"description": "Check if outbound SMTP port 25 is accessible. Essential diagnostic for email verification capability.\n\n**Response Fields:**\n- `port25Open` (boolean): Whether port 25 is accessible\n- `canVerifyEmails` (boolean): Whether email verification can be performed\n- `testedHost` (string): Which mail server was successfully tested (null if blocked)\n- `provider` (string): Provider name of successful connection\n- `recommendation` (string): Actionable advice if port is blocked\n- `smtpBanner` (string): SMTP greeting banner from successful connection\n\n**Use Cases:**\n- Pre-flight check before submitting verifications\n- Troubleshooting connectivity issues\n- Network diagnostic and monitoring"
+			},
+			"response": [
+				{
+					"name": "Port 25 Open (Success)",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/verifier/port25-check",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"verifier",
+								"port25-check"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"body": "{\n  \"success\": true,\n  \"data\": {\n    \"success\": true,\n    \"port25Open\": true,\n    \"canVerifyEmails\": true,\n    \"testedHost\": \"mxshield.brandnav.io\",\n    \"provider\": \"BrandNav\",\n    \"attemptedHosts\": [\"mxshield.brandnav.io\"],\n    \"responseTime\": 234,\n    \"totalTime\": 456,\n    \"smtpBanner\": \"220 mxshield.brandnav.io ESMTP\",\n    \"error\": null,\n    \"errors\": [],\n    \"recommendation\": null,\n    \"timestamp\": \"2025-11-07T10:30:00.000Z\"\n  }\n}"
+				},
+				{
+					"name": "Port 25 Blocked",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/verifier/port25-check",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"verifier",
+								"port25-check"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"body": "{\n  \"success\": true,\n  \"data\": {\n    \"success\": true,\n    \"port25Open\": false,\n    \"canVerifyEmails\": false,\n    \"testedHost\": null,\n    \"provider\": null,\n    \"attemptedHosts\": [\n      \"mxshield.brandnav.io\",\n      \"gmail-smtp-in.l.google.com\",\n      \"mx-biz.mail.am0.yahoodns.net\",\n      \"mail.protection.outlook.com\",\n      \"mx1.zoho.com\"\n    ],\n    \"responseTime\": null,\n    \"totalTime\": 25234,\n    \"smtpBanner\": null,\n    \"error\": \"All connection attempts failed\",\n    \"errors\": [\n      {\n        \"host\": \"mxshield.brandnav.io\",\n        \"provider\": \"BrandNav\",\n        \"error\": \"ECONNREFUSED\",\n        \"reason\": \"Connection refused - Port 25 likely blocked by firewall/ISP\",\n        \"severity\": \"high\",\n        \"blocked\": true\n      }\n    ],\n    \"recommendation\": \"Port 25 is blocked by your network/ISP. Consider using a VPS or cloud server with port 25 access for email verification.\",\n    \"timestamp\": \"2025-11-07T10:30:00.000Z\"\n  }\n}"
+				}
+			]
 		}
 	]
 }

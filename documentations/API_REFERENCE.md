@@ -171,6 +171,103 @@ Returns same format as status endpoint while processing.
 
 ---
 
+### 4. Check Port 25 Connectivity
+**GET** `/api/verifier/port25-check`
+
+**Auth:** Session OR API Key
+
+**Description:**
+Checks if outbound SMTP port 25 is accessible from your server/network. This is essential for email verification as port 25 is required to connect to mail servers. This endpoint helps diagnose connectivity issues and verify email verification capability.
+
+**Response (200 - Port Open):**
+```json
+{
+  "success": true,
+  "data": {
+    "success": true,
+    "port25Open": true,
+    "canVerifyEmails": true,
+    "testedHost": "mxshield.brandnav.io",
+    "provider": "BrandNav",
+    "attemptedHosts": ["mxshield.brandnav.io"],
+    "responseTime": 234,
+    "totalTime": 456,
+    "smtpBanner": "220 mxshield.brandnav.io ESMTP",
+    "error": null,
+    "errors": [],
+    "recommendation": null,
+    "timestamp": "2025-11-07T10:30:00.000Z"
+  }
+}
+```
+
+**Response (200 - Port Blocked):**
+```json
+{
+  "success": true,
+  "data": {
+    "success": true,
+    "port25Open": false,
+    "canVerifyEmails": false,
+    "testedHost": null,
+    "provider": null,
+    "attemptedHosts": [
+      "mxshield.brandnav.io",
+      "gmail-smtp-in.l.google.com",
+      "mx-biz.mail.am0.yahoodns.net",
+      "mail.protection.outlook.com",
+      "mx1.zoho.com"
+    ],
+    "responseTime": null,
+    "totalTime": 25234,
+    "smtpBanner": null,
+    "error": "All connection attempts failed",
+    "errors": [
+      {
+        "host": "mxshield.brandnav.io",
+        "provider": "BrandNav",
+        "error": "ECONNREFUSED",
+        "reason": "Connection refused - Port 25 likely blocked by firewall/ISP",
+        "severity": "high",
+        "blocked": true
+      }
+    ],
+    "recommendation": "Port 25 is blocked by your network/ISP. Consider using a VPS or cloud server with port 25 access for email verification.",
+    "timestamp": "2025-11-07T10:30:00.000Z"
+  }
+}
+```
+
+**Use Cases:**
+- Pre-flight check before submitting email verifications
+- Diagnostic tool to troubleshoot verification issues
+- Network connectivity validation
+- Monitoring email verification capability
+
+**curl Examples:**
+```bash
+# With session authentication (after login)
+curl -X GET http://localhost:5000/api/verifier/port25-check \
+  -H "Cookie: connect.sid=your-session-cookie"
+
+# With API key authentication
+curl -X GET http://localhost:5000/api/verifier/port25-check \
+  -H "Authorization: Bearer brndnv_sk_yourkey"
+```
+
+**Errors:**
+- `401` - Unauthorized (not authenticated)
+- `500` - Internal Server Error (check failed unexpectedly)
+
+**Important Notes:**
+- Port 25 is frequently blocked by residential ISPs and some cloud providers
+- The check tests multiple reliable SMTP servers (BrandNav, Google, Yahoo, Microsoft, Zoho)
+- Check stops on first successful connection (fastest when port is open)
+- Maximum test duration: ~25 seconds if all servers fail
+- Typical success response time: < 5 seconds
+
+---
+
 ## Email Verification Statuses
 
 - **valid** - Email is deliverable and can receive mail. Passes all SMTP checks, has valid MX records, and is not disposable.

@@ -1,5 +1,28 @@
 # Email Verifier
 
+## ⚠️ Important Network Requirement
+
+**This application requires outbound port 25 (SMTP) access to function properly.** Port 25 is essential for connecting to mail servers and verifying email addresses.
+
+### Port 25 Availability
+
+- **Most residential ISPs block port 25** to prevent spam (some exceptions exist, like Airtel FTTH in India)
+- **Many cloud providers block port 25 by default** but can enable it upon request
+- **VPS and dedicated servers** typically have port 25 open
+
+### How to Get Port 25 Access
+
+If your port 25 is blocked:
+
+1. **Contact your server/cloud provider** (AWS, DigitalOcean, Hetzner, etc.)
+2. **Request outbound port 25 access** for hosting your SMTP server
+3. **Explain your use case**: "I need to host my own SMTP server for email verification"
+4. Most providers will enable it within 24-48 hours
+
+**Need to check if port 25 is accessible?** The dashboard includes a built-in port 25 connectivity checker that will notify you if port 25 is blocked.
+
+---
+
 ## What This Project Does
 
 Email Verifier is a comprehensive email validation service that checks the deliverability and validity of email addresses. The system verifies emails and returns one of four statuses: valid, invalid, catch-all, or unverifiable, along with detailed reasons for each result.

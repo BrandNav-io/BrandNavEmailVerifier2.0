@@ -71,8 +71,12 @@ export function AuthLayout({
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5 }}
                     >
-                        <div className="mx-auto h-12 w-12 bg-gray-900 rounded-lg flex items-center justify-center mb-4">
-                            <span className="text-white font-bold text-xl">B</span>
+                        <div className="mx-auto mb-4 flex items-center justify-center">
+                            <img
+                                src="/logo.svg"
+                                alt="BrandNav Logo"
+                                className="h-12 w-auto p-2"
+                            />
                         </div>
                         <h1 className="text-2xl font-bold text-gray-900 mb-2">
                             {title}

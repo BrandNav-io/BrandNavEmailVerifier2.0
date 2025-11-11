@@ -472,7 +472,7 @@ Yes, each request performs a fresh verification - no caching.
 
 Import the Postman collection for instant testing:
 
-**Location:** `documentations/email-verifier-postman-collection.json`
+**Location:** `documentations/BrandNavEmailVerifier-postman-collection.json`
 
 **Features:**
 - Pre-configured endpoints with examples

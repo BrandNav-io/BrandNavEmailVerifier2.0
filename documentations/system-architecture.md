@@ -57,10 +57,10 @@ Email Verifier is a full-stack web application that provides email verification 
 │  └────────────────────────────────────────────────────────────┘ │
 │                                                                 │
 │  ┌────────────────────────────────────────────────────────────┐ │
-│  │               PERSISTENT VOLUMES                           │ │
-│  │  - email-verifier-db   → .sql/                             │ │
-│  │  - email-verifier-csv  → csv/                              │ │
-│  │  - email-verifier-logs → .logs/                            │ │
+│  │               BIND MOUNTS (Host → Container)               │ │
+│  │  - ./.data/db   → /app/backend/.sql                        │ │
+│  │  - ./.data/csv  → /app/backend/csv                         │ │
+│  │  - ./.data/logs → /app/backend/.logs                       │ │
 │  └────────────────────────────────────────────────────────────┘ │
 └─────────────────────────────────────────────────────────────────┘
                               │
@@ -104,7 +104,7 @@ Email Verifier is a full-stack web application that provides email verification 
 ### Deployment
 - Docker with single-stage build
 - Docker Compose for orchestration
-- Named volumes for data persistence
+- Bind mounts for data persistence
 - Health checks via HTTP endpoint
 
 ---
@@ -675,16 +675,17 @@ Single-stage build process:
 ### Docker Compose Configuration
 
 ```yaml
-Service: email-verifier-app
+Service: brandnavemailverifier
+Container: brandnavemailverifier-app
     ↓
 Port: 127.0.0.1:5000:5000 (localhost only for security)
     ↓
 Environment: Loaded from backend/.env
     ↓
-Volumes:
-    - email-verifier-db → /app/backend/.sql
-    - email-verifier-csv → /app/backend/csv
-    - email-verifier-logs → /app/backend/.logs
+Bind Mounts (Host → Container):
+    - ./.data/db → /app/backend/.sql
+    - ./.data/csv → /app/backend/csv
+    - ./.data/logs → /app/backend/.logs
     ↓
 Restart: unless-stopped
     ↓

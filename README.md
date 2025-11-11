@@ -59,7 +59,7 @@ Follow these steps to get the application running:
 
 ```bash
 git clone https://github.com/BrandNav-io/BrandNavEmailVerifier2.0.git
-cd email-verifier
+cd BrandNavEmailVerifier2.0
 ```
 
 ### Step 2: Configure environment variables
@@ -157,10 +157,10 @@ Your data is stored directly on your host machine and remains safe across contai
 
 Want to verify emails programmatically using API keys? We provide comprehensive API documentation to help you integrate email verification directly into your applications.
 
-📦 **[Postman Collection](./documentations/email-verifier-postman-collection.json)** - Import this file into Postman to quickly test the API endpoints
+📦 **[Postman Collection](./documentations/BrandNavEmailVerifier-postman-collection.json)** - Import this file into Postman to quickly test the API endpoints
 
 **How to use the Postman Collection:**
-1. Download the `email-verifier-postman-collection.json` file from the documentations folder
+1. Download the `BrandNavEmailVerifier-postman-collection.json` file from the documentations folder
 2. Open Postman and click **Import** in the top left
 3. Drag and drop the JSON file or click **Upload Files** and select it
 4. Once imported, go to the collection variables and update:

@@ -1,10 +1,10 @@
 services:
-    email-verifier:
+    brandnavemailverifier:
         build:
             context: .
             dockerfile: Dockerfile
 
-        container_name: email-verifier-app
+        container_name: brandnavemailverifier-app
 
         # Port mapping: host:container
         # Only expose to localhost - nginx will proxy to it
